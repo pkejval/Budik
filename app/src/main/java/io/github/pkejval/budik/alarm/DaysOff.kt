@@ -62,6 +62,8 @@ object CzechHolidays {
     }
 }
 
+enum class DayOffReason { HOLIDAY, VACATION }
+
 data class CalendarInfo(val id: Long, val name: String, val account: String, val color: Int)
 
 /** Decides whether a moment falls on a day off (public holiday or a matching calendar event). */
@@ -74,7 +76,13 @@ class DaysOff(private val context: Context, private val settings: Settings) {
      * Calendar events can change after scheduling, so they are only consulted for display
      * and at ring time; otherwise a deleted vacation event would leave the alarm silent.
      */
-    fun isDayOff(at: ZonedDateTime) = isHoliday(at) || isCalendarDayOff(at)
+    fun reason(at: ZonedDateTime) = when {
+        isHoliday(at) -> DayOffReason.HOLIDAY
+        isCalendarDayOff(at) -> DayOffReason.VACATION
+        else -> null
+    }
+
+    fun isDayOff(at: ZonedDateTime) = reason(at) != null
 
     fun hasCalendarPermission() = context.checkSelfPermission(Manifest.permission.READ_CALENDAR) ==
         PackageManager.PERMISSION_GRANTED

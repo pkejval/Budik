@@ -28,6 +28,9 @@
     <string name="next_ring">Next: %1$s</string>
     <string name="skipped_next">Skipped, next: %1$s</string>
     <string name="not_scheduled">Not scheduled</string>
+    <string name="skips">Skips: %1$s</string>
+    <string name="reason_holiday">holiday</string>
+    <string name="reason_vacation">vacation</string>
     <string name="more">More</string>
     <string name="skip_next">Skip next</string>
     <string name="unskip">Undo skip</string>

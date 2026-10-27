@@ -61,6 +61,28 @@ class NextTriggerTest {
     }
 
     @Test
+    fun skippedRangesMergeConsecutiveOccurrences() {
+        val alarm = Alarm(hour = 7, daysMask = Alarm.WORKDAYS)
+        // Tue 27 Oct evening: Wed 28 is a holiday, Thu 29 - Mon 2 Nov is vacation, Tue 3 rings.
+        val vacation = LocalDate.of(2026, 10, 29)..LocalDate.of(2026, 11, 2)
+        val ranges = alarm.skippedBeforeNext(at(2026, 10, 27, 20, 0)) {
+            val d = it.toLocalDate()
+            when {
+                CzechHolidays.isHoliday(d) -> DayOffReason.HOLIDAY
+                d in vacation -> DayOffReason.VACATION
+                else -> null
+            }
+        }
+        assertEquals(
+            listOf(
+                SkippedRange(LocalDate.of(2026, 10, 28), LocalDate.of(2026, 10, 28), DayOffReason.HOLIDAY),
+                SkippedRange(LocalDate.of(2026, 10, 29), LocalDate.of(2026, 11, 2), DayOffReason.VACATION),
+            ),
+            ranges,
+        )
+    }
+
+    @Test
     fun dstGapMovesAlarmForward() {
         // 2026-03-29 02:30 does not exist in Prague.
         val alarm = Alarm(hour = 2, minute = 30, daysMask = Alarm.EVERY_DAY)

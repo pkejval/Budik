@@ -35,3 +35,25 @@ fun Alarm.nextTrigger(
     }
     return null
 }
+
+data class SkippedRange(val from: LocalDate, val to: LocalDate, val reason: DayOffReason)
+
+/**
+ * Occurrences vetoed by [reasonOf] before the next real ring. Consecutive occurrences with
+ * the same reason are merged, so a week of vacation is one range.
+ */
+fun Alarm.skippedBeforeNext(after: ZonedDateTime, reasonOf: (ZonedDateTime) -> DayOffReason?): List<SkippedRange> {
+    val ranges = mutableListOf<SkippedRange>()
+    if (!isRepeating) return ranges
+    var cursor = after
+    repeat(SEARCH_DAYS.toInt()) {
+        val at = nextTrigger(cursor) ?: return ranges
+        val reason = reasonOf(at) ?: return ranges
+        val day = at.toLocalDate()
+        val last = ranges.lastOrNull()
+        if (last?.reason == reason) ranges[ranges.lastIndex] = last.copy(to = day)
+        else ranges += SkippedRange(day, day, reason)
+        cursor = at
+    }
+    return ranges
+}

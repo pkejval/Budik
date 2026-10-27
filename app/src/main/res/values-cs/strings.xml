@@ -27,6 +27,9 @@
     <string name="next_ring">Příště: %1$s</string>
     <string name="skipped_next">Přeskočeno, příště: %1$s</string>
     <string name="not_scheduled">Nenaplánováno</string>
+    <string name="skips">Přeskočí: %1$s</string>
+    <string name="reason_holiday">svátek</string>
+    <string name="reason_vacation">dovolená</string>
     <string name="more">Další</string>
     <string name="skip_next">Přeskočit příští</string>
     <string name="unskip">Zrušit přeskočení</string>

@@ -9,6 +9,8 @@ import android.text.format.DateFormat
 import android.widget.Toast
 import io.github.pkejval.budik.R
 import io.github.pkejval.budik.alarm.AlarmScheduler
+import io.github.pkejval.budik.alarm.DayOffReason
+import io.github.pkejval.budik.alarm.SkippedRange
 import io.github.pkejval.budik.data.Alarm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -37,15 +39,29 @@ fun repeatSummary(context: Context, alarm: Alarm): String = when (alarm.daysMask
     else -> DayOfWeek.entries.filter(alarm::ringsOn).joinToString(", ", transform = ::dayShort)
 }
 
+private fun formatDay(day: LocalDate) = "${dayShort(day.dayOfWeek)} ${day.format(DateTimeFormatter.ofPattern("d. M."))}"
+
 fun formatNext(context: Context, at: ZonedDateTime): String {
     val day = at.toLocalDate()
     val today = LocalDate.now()
     val dayText = when (day) {
         today -> context.getString(R.string.today)
         today.plusDays(1) -> context.getString(R.string.tomorrow)
-        else -> "${dayShort(day.dayOfWeek)} ${day.format(DateTimeFormatter.ofPattern("d. M."))}"
+        else -> formatDay(day)
     }
     return "$dayText ${formatTime(context, at.hour, at.minute)}"
+}
+
+/** "St 28. 10. (svátek), Po 2. 11. – Pá 6. 11. (dovolená)" */
+fun formatSkipped(context: Context, ranges: List<SkippedRange>) = ranges.joinToString(", ") { r ->
+    val dates = if (r.from == r.to) formatDay(r.from) else "${formatDay(r.from)} – ${formatDay(r.to)}"
+    val reason = context.getString(
+        when (r.reason) {
+            DayOffReason.HOLIDAY -> R.string.reason_holiday
+            DayOffReason.VACATION -> R.string.reason_vacation
+        },
+    )
+    "$dates ($reason)"
 }
 
 fun formatRingsIn(context: Context, at: ZonedDateTime): String {

@@ -73,6 +73,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.pkejval.budik.R
 import io.github.pkejval.budik.alarm.AlarmScheduler
+import io.github.pkejval.budik.alarm.SkippedRange
 import io.github.pkejval.budik.app
 import io.github.pkejval.budik.data.Alarm
 import kotlinx.coroutines.Dispatchers
@@ -95,10 +96,17 @@ fun AlarmListScreen(onEdit: (Long) -> Unit, onSettings: () -> Unit) {
             tick++
         }
     }
-    val nextTimes by produceState(emptyMap<Long, ZonedDateTime?>(), alarms, tick) {
-        value = withContext(Dispatchers.IO) { alarms.associate { it.id to AlarmScheduler.expectedTrigger(context, it) } }
+    val upcoming by produceState(emptyMap<Long, Upcoming>(), alarms, tick) {
+        value = withContext(Dispatchers.IO) {
+            alarms.associate {
+                it.id to Upcoming(
+                    AlarmScheduler.expectedTrigger(context, it),
+                    AlarmScheduler.skippedBeforeNext(context, it),
+                )
+            }
+        }
     }
-    val next = nextTimes.values.filterNotNull().minOrNull()
+    val next = upcoming.values.mapNotNull { it.next }.minOrNull()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
@@ -132,7 +140,7 @@ fun AlarmListScreen(onEdit: (Long) -> Unit, onSettings: () -> Unit) {
             items(alarms, key = { it.id }) { alarm ->
                 AlarmCard(
                     alarm = alarm,
-                    next = nextTimes[alarm.id],
+                    upcoming = upcoming[alarm.id] ?: Upcoming(null, emptyList()),
                     onClick = { onEdit(alarm.id) },
                     onToggle = { enabled ->
                         scope.launch {
@@ -179,10 +187,12 @@ private fun EmptyState() {
     }
 }
 
+private data class Upcoming(val next: ZonedDateTime?, val skipped: List<SkippedRange>)
+
 @Composable
 private fun AlarmCard(
     alarm: Alarm,
-    next: ZonedDateTime?,
+    upcoming: Upcoming,
     onClick: () -> Unit,
     onToggle: (Boolean) -> Unit,
     onDuplicate: () -> Unit,
@@ -212,10 +222,17 @@ private fun AlarmCard(
                             Spacer(Modifier.width(4.dp))
                         }
                         Text(
-                            next?.let { stringResource(if (skipped) R.string.skipped_next else R.string.next_ring, formatNext(context, it)) }
+                            upcoming.next?.let { stringResource(if (skipped) R.string.skipped_next else R.string.next_ring, formatNext(context, it)) }
                                 ?: stringResource(R.string.not_scheduled),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    if (upcoming.skipped.isNotEmpty()) {
+                        Text(
+                            stringResource(R.string.skips, formatSkipped(context, upcoming.skipped)),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.tertiary,
                         )
                     }
                 }

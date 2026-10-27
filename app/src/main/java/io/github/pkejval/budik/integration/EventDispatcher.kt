@@ -21,16 +21,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.eclipse.paho.client.mqttv3.MqttClient
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "BudikEvents"
-private const val TIMEOUT_MS = 5_000
 
 object EventDispatcher {
 
@@ -48,11 +44,13 @@ object EventDispatcher {
             timestamp = System.currentTimeMillis(),
         )
         val appContext = context.applicationContext
+        // More events follow a ringing one, so its MQTT connection stays open for them.
+        val keepOpen = event == AlarmEvent.RINGING
         return appContext.app.scope.launch(Dispatchers.IO) {
             appContext.app.db.integrations().enabled().filter { it.handles(event) }.forEach { integration ->
                 launch {
                     try {
-                        send(appContext, integration, message)
+                        send(appContext, integration, message, keepOpen)
                     } catch (e: Exception) {
                         Log.w(TAG, "Delivery to ${integration.name} failed, queueing retry", e)
                         if (integration.type != IntegrationType.INTENT) {
@@ -64,13 +62,13 @@ object EventDispatcher {
         }
     }
 
-    /** Throws on failure. */
-    suspend fun send(context: Context, integration: Integration, message: EventMessage) =
+    /** Throws on failure. With [keepOpen] an MQTT connection is parked for the next event. */
+    suspend fun send(context: Context, integration: Integration, message: EventMessage, keepOpen: Boolean = false) =
         withContext(Dispatchers.IO) {
             when (integration.type) {
                 IntegrationType.INTENT -> sendIntent(context, integration, message)
                 IntegrationType.WEBHOOK -> sendWebhook(integration, message)
-                IntegrationType.MQTT -> sendMqtt(integration, message)
+                IntegrationType.MQTT -> sendMqtt(integration, message, keepOpen)
             }
         }
 
@@ -111,37 +109,37 @@ object EventDispatcher {
             val code = connection.responseCode
             if (code !in 200..299) throw IOException("HTTP $code")
         } finally {
-            connection.disconnect()
+            // Keep the socket in the pool so the next event skips DNS, TCP and TLS.
+            Connections.releaseHttp(connection)
         }
     }
 
-    private fun sendMqtt(integration: Integration, message: EventMessage) {
-        val scheme = if (integration.mqttTls) "ssl" else "tcp"
-        val client = MqttClient(
-            "$scheme://${integration.mqttHost.trim()}:${integration.mqttPort}",
-            "budik-" + UUID.randomUUID().toString().take(8),
-            MemoryPersistence(),
-        )
-        try {
-            client.timeToWait = TIMEOUT_MS.toLong()
-            client.connect(MqttConnectOptions().apply {
-                isCleanSession = true
-                connectionTimeout = TIMEOUT_MS / 1000
-                if (integration.mqttUser.isNotBlank()) {
-                    userName = integration.mqttUser
-                    password = integration.mqttPassword.toCharArray()
-                }
-            })
+    private fun sendMqtt(integration: Integration, message: EventMessage, keepOpen: Boolean) {
+        fun publish(client: MqttClient) {
             client.publish(
                 message.render(integration.mqttTopic),
                 message.render(integration.mqttPayload).toByteArray(),
                 integration.mqttQos.coerceIn(0, 2),
                 integration.mqttRetain,
             )
-            client.disconnect(TIMEOUT_MS.toLong())
-        } finally {
-            runCatching { if (client.isConnected) client.disconnectForcibly(1000) }
-            client.close()
+            if (keepOpen) Connections.parkMqtt(integration, client, Connections.RINGING_TTL_MS)
+            else Connections.closeMqtt(client)
+        }
+        Connections.takeMqtt(integration)?.let { warm ->
+            try {
+                return publish(warm)
+            } catch (e: Exception) {
+                // The broker may have dropped the parked session; fall through to a fresh one.
+                Log.w(TAG, "Parked MQTT connection failed, reconnecting", e)
+                Connections.closeMqtt(warm)
+            }
+        }
+        val fresh = Connections.connectMqtt(integration)
+        try {
+            publish(fresh)
+        } catch (e: Exception) {
+            Connections.closeMqtt(fresh)
+            throw e
         }
     }
 }

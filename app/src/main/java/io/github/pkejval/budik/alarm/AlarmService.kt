@@ -79,7 +79,7 @@ class AlarmService : Service() {
         if (current != null) stop(AlarmEvent.MISSED)
         current = alarm
         _ringing.value = alarm
-        deliveries += EventDispatcher.dispatch(this, AlarmEvent.RINGING, alarm)
+        // The RINGING event was already sent by AlarmReceiver.
         goForeground(alarm)
 
         val timeoutMs = TimeUnit.MINUTES.toMillis(alarm.autoSilenceMinutes.toLong())
