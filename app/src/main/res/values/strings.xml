@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Budík</string>
+    <string name="channel_ringing">Ringing alarm</string>
+    <string name="channel_missed">Missed alarms</string>
+    <string name="alarm_ringing">Alarm is ringing</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="missed_alarm">Missed alarm %1$s</string>
+    <string name="slide_to_dismiss">Slide to dismiss</string>
+    <string name="slide_up_to_dismiss">Slide up to dismiss</string>
+
+    <string name="once">Once</string>
+    <string name="every_day">Every day</string>
+    <string name="workdays">Weekdays</string>
+    <string name="weekend">Weekend</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="duration_dh">%1$d d %2$d h</string>
+    <string name="duration_hm">%1$d h %2$d min</string>
+    <string name="duration_m">%1$d min</string>
+    <string name="rings_in">Rings in %1$s</string>
+    <string name="default_sound">Default alarm sound</string>
+
+    <string name="settings">Settings</string>
+    <string name="add_alarm">Add alarm</string>
+    <string name="no_active_alarm">No active alarm</string>
+    <string name="no_alarms">No alarms yet. Add one with +</string>
+    <string name="next_ring">Next: %1$s</string>
+    <string name="skipped_next">Skipped, next: %1$s</string>
+    <string name="not_scheduled">Not scheduled</string>
+    <string name="more">More</string>
+    <string name="skip_next">Skip next</string>
+    <string name="unskip">Undo skip</string>
+    <string name="duplicate">Duplicate</string>
+    <string name="delete">Delete</string>
+    <string name="perm_notifications">Notifications are off – the alarm screen cannot be shown.</string>
+    <string name="perm_exact">Exact alarms are not allowed – alarms may not ring on time.</string>
+    <string name="perm_full_screen">Full-screen alarms are not allowed – the alarm will only show as a notification.</string>
+    <string name="fix">Fix</string>
+
+    <string name="new_alarm">New alarm</string>
+    <string name="edit_alarm">Edit alarm</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="label">Label</string>
+    <string name="repeat">Repeat</string>
+    <string name="skip_days_off">Not on days off</string>
+    <string name="skip_days_off_hint">Skip public holidays and vacation from the calendar (see Settings)</string>
+    <string name="sound">Sound</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="ramp">Gradually increase volume</string>
+    <string name="off">Off</string>
+    <string name="seconds">%1$d s</string>
+    <string name="auto_silence">Silence after (missed)</string>
+    <string name="minutes">%1$d min</string>
+    <string name="dismiss_method">Dismiss with</string>
+    <string name="method_horizontal">Slider ↔</string>
+    <string name="method_vertical">Slider ↕</string>
+    <string name="method_button">Button</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="date">Date</string>
+    <string name="date_next">Next occurrence of the time</string>
+    <string name="clear">Clear</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="ringtone_system">System sounds</string>
+    <string name="ringtone_file">Audio file…</string>
+
+    <string name="days_off">Days off</string>
+    <string name="days_off_hint">Used by alarms with “Not on days off” enabled.</string>
+    <string name="cz_holidays">Czech public holidays</string>
+    <string name="cz_holidays_hint">Built in, works offline</string>
+    <string name="grant_calendar">Allow calendar access</string>
+    <string name="calendars">Calendars with days off (e.g. vacation)</string>
+    <string name="no_calendars">No calendars found on this device.</string>
+    <string name="keywords">Event title keywords</string>
+    <string name="keywords_hint">Comma separated, e.g. Vacation, Holiday. Empty = any event in the selected calendars.</string>
+    <string name="integrations">Integrations</string>
+    <string name="integrations_hint">Sent immediately when an alarm rings, is dismissed or missed. Failed network deliveries are retried once the connection is back.</string>
+    <string name="disabled">disabled</string>
+    <string name="add_integration">Add integration</string>
+    <string name="type_intent">Intent</string>
+    <string name="type_webhook">Webhook</string>
+    <string name="type_mqtt">MQTT</string>
+
+    <string name="integration">Integration</string>
+    <string name="name">Name</string>
+    <string name="enabled">Enabled</string>
+    <string name="events">Events</string>
+    <string name="event_ringing">Alarm rings</string>
+    <string name="event_dismissed">Alarm dismissed</string>
+    <string name="event_missed">Alarm missed</string>
+    <string name="intent_action">Broadcast action</string>
+    <string name="intent_package">Target package (optional)</string>
+    <string name="intent_hint">Broadcast extras: event, alarm_id, label, alarm_time, timestamp, time. Works with Tasker, Automate, MacroDroid…</string>
+    <string name="url">URL</string>
+    <string name="headers">Headers (one “Name: value” per line)</string>
+    <string name="body">Body</string>
+    <string name="mqtt_host">Broker host</string>
+    <string name="mqtt_port">Port</string>
+    <string name="mqtt_tls">TLS</string>
+    <string name="mqtt_user">Username</string>
+    <string name="mqtt_password">Password</string>
+    <string name="mqtt_topic">Topic</string>
+    <string name="mqtt_payload">Payload</string>
+    <string name="mqtt_qos">Quality of service</string>
+    <string name="mqtt_retain">Retain</string>
+    <string name="placeholders_hint">Placeholders: {event} (ringing / dismissed / missed / test), {alarm_id}, {label}, {alarm_time}, {timestamp}, {time}, {json}</string>
+    <string name="test_send">Send test</string>
+    <string name="test_ok">Test sent</string>
+    <string name="test_failed">Sending failed</string>
+</resources>
