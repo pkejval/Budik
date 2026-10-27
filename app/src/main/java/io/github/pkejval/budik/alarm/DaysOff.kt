@@ -11,18 +11,36 @@ import java.time.Month
 import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
-object CzechHolidays {
-    private val fixed = setOf(
-        Month.JANUARY to 1, Month.MAY to 1, Month.MAY to 8, Month.JULY to 5, Month.JULY to 6,
-        Month.SEPTEMBER to 28, Month.OCTOBER to 28, Month.NOVEMBER to 17,
-        Month.DECEMBER to 24, Month.DECEMBER to 25, Month.DECEMBER to 26,
-    )
+enum class CzechHoliday {
+    NEW_YEAR, GOOD_FRIDAY, EASTER_MONDAY, LABOUR_DAY, LIBERATION_DAY, CYRIL_METHODIUS, JAN_HUS,
+    STATEHOOD_DAY, INDEPENDENCE_DAY, FREEDOM_DAY, CHRISTMAS_EVE, CHRISTMAS_DAY, ST_STEPHEN,
+}
 
-    fun isHoliday(day: LocalDate): Boolean {
-        if (day.month to day.dayOfMonth in fixed) return true
-        val easter = easterSunday(day.year)
-        return day == easter.minusDays(2) || day == easter.plusDays(1) // Good Friday, Easter Monday
+object CzechHolidays {
+    fun of(year: Int): List<Pair<LocalDate, CzechHoliday>> {
+        val easter = easterSunday(year)
+        fun d(month: Month, day: Int) = LocalDate.of(year, month, day)
+        return listOf(
+            d(Month.JANUARY, 1) to CzechHoliday.NEW_YEAR,
+            easter.minusDays(2) to CzechHoliday.GOOD_FRIDAY,
+            easter.plusDays(1) to CzechHoliday.EASTER_MONDAY,
+            d(Month.MAY, 1) to CzechHoliday.LABOUR_DAY,
+            d(Month.MAY, 8) to CzechHoliday.LIBERATION_DAY,
+            d(Month.JULY, 5) to CzechHoliday.CYRIL_METHODIUS,
+            d(Month.JULY, 6) to CzechHoliday.JAN_HUS,
+            d(Month.SEPTEMBER, 28) to CzechHoliday.STATEHOOD_DAY,
+            d(Month.OCTOBER, 28) to CzechHoliday.INDEPENDENCE_DAY,
+            d(Month.NOVEMBER, 17) to CzechHoliday.FREEDOM_DAY,
+            d(Month.DECEMBER, 24) to CzechHoliday.CHRISTMAS_EVE,
+            d(Month.DECEMBER, 25) to CzechHoliday.CHRISTMAS_DAY,
+            d(Month.DECEMBER, 26) to CzechHoliday.ST_STEPHEN,
+        ).sortedBy { it.first }
     }
+
+    fun isHoliday(day: LocalDate) = of(day.year).any { it.first == day }
+
+    fun upcoming(from: LocalDate, count: Int) =
+        (of(from.year) + of(from.year + 1)).filter { !it.first.isBefore(from) }.take(count)
 
     /** Anonymous Gregorian algorithm. */
     fun easterSunday(year: Int): LocalDate {

@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import io.github.pkejval.budik.data.IntegrationType
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +32,15 @@ class MainActivity : ComponentActivity() {
                     composable("settings") {
                         SettingsScreen(
                             onBack = { nav.popBackStack() },
-                            onIntegration = { id -> nav.navigate("integration/$id") },
+                            onIntegration = { id, type -> nav.navigate("integration/$id?type=${type?.name ?: ""}") },
                         )
                     }
-                    composable("integration/{id}", idArg) {
-                        IntegrationEditScreen(it.arguments!!.getLong("id"), onBack = { nav.popBackStack() })
+                    composable(
+                        "integration/{id}?type={type}",
+                        idArg + navArgument("type") { type = NavType.StringType; defaultValue = "" },
+                    ) {
+                        val type = IntegrationType.entries.firstOrNull { t -> t.name == it.arguments?.getString("type") }
+                        IntegrationEditScreen(it.arguments!!.getLong("id"), type, onBack = { nav.popBackStack() })
                     }
                 }
             }

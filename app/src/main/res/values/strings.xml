@@ -67,21 +67,62 @@
     <string name="ringtone_file">Audio file…</string>
 
     <string name="days_off">Days off</string>
-    <string name="days_off_hint">Used by alarms with “Not on days off” enabled.</string>
+    <string name="days_off_hint">Alarms with “Not on days off” enabled skip public holidays and days with an event in the selected calendars.</string>
     <string name="cz_holidays">Czech public holidays</string>
     <string name="cz_holidays_hint">Built in, works offline</string>
+    <string name="upcoming_holidays">Upcoming holidays</string>
+    <string name="calendars">Calendars</string>
+    <string name="calendar_permission_hint">Allow calendar access to use vacation and other days off from your Google calendars.</string>
     <string name="grant_calendar">Allow calendar access</string>
-    <string name="calendars">Calendars with days off (e.g. vacation)</string>
+    <string name="calendars_empty">No calendar selected. Add one with +, e.g. your vacation calendar.</string>
+    <string name="selected_calendars">Calendars with days off</string>
+    <string name="add_calendar">Add calendar</string>
+    <string name="all_calendars_added">All calendars are already added.</string>
     <string name="no_calendars">No calendars found on this device.</string>
+    <string name="remove">Remove</string>
+    <string name="event_filter">Event filter</string>
     <string name="keywords">Event title keywords</string>
     <string name="keywords_hint">Comma separated, e.g. Vacation, Holiday. Empty = any event in the selected calendars.</string>
     <string name="integrations">Integrations</string>
     <string name="integrations_hint">Sent immediately when an alarm rings, is dismissed or missed. Failed network deliveries are retried once the connection is back.</string>
-    <string name="disabled">disabled</string>
+    <string name="integrations_empty">No integrations yet. Add one with +.</string>
     <string name="add_integration">Add integration</string>
     <string name="type_intent">Intent</string>
     <string name="type_webhook">Webhook</string>
     <string name="type_mqtt">MQTT</string>
+    <string name="type_intent_desc">Android broadcast for Tasker, Automate, MacroDroid…</string>
+    <string name="type_webhook_desc">HTTP request, e.g. Home Assistant or n8n</string>
+    <string name="type_mqtt_desc">Publish a message to an MQTT broker</string>
+
+    <string name="appearance">Appearance</string>
+    <string name="preview_label">Work</string>
+    <string name="ring_style">Ringing screen colors</string>
+    <string name="style_night">Night</string>
+    <string name="style_ocean">Ocean</string>
+    <string name="style_forest">Forest</string>
+    <string name="style_sunset">Sunset</string>
+    <string name="style_amoled">Black</string>
+    <string name="style_system">System</string>
+    <string name="clock_weight">Clock font</string>
+    <string name="weight_thin">Thin</string>
+    <string name="weight_light">Light</string>
+    <string name="weight_bold">Bold</string>
+    <string name="ring_animated">Animations</string>
+    <string name="show_date">Show date</string>
+
+    <string name="holiday_new_year">New Year’s Day</string>
+    <string name="holiday_good_friday">Good Friday</string>
+    <string name="holiday_easter_monday">Easter Monday</string>
+    <string name="holiday_labour_day">Labour Day</string>
+    <string name="holiday_liberation">Liberation Day</string>
+    <string name="holiday_cyril_methodius">Saints Cyril and Methodius Day</string>
+    <string name="holiday_jan_hus">Jan Hus Day</string>
+    <string name="holiday_statehood">Czech Statehood Day</string>
+    <string name="holiday_independence">Independence Day</string>
+    <string name="holiday_freedom">Freedom and Democracy Day</string>
+    <string name="holiday_christmas_eve">Christmas Eve</string>
+    <string name="holiday_christmas_day">Christmas Day</string>
+    <string name="holiday_st_stephen">St. Stephen’s Day</string>
 
     <string name="integration">Integration</string>
     <string name="name">Name</string>

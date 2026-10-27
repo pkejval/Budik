@@ -55,13 +55,16 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IntegrationEditScreen(id: Long, onBack: () -> Unit) {
+fun IntegrationEditScreen(id: Long, initialType: IntegrationType?, onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
     val dao = context.app.db.integrations()
     var integration by remember { mutableStateOf<Integration?>(null) }
-    LaunchedEffect(id) { integration = if (id == 0L) Integration() else dao.get(id) ?: Integration() }
+    LaunchedEffect(id) {
+        val new = Integration(type = initialType ?: IntegrationType.WEBHOOK)
+        integration = if (id == 0L) new else dao.get(id) ?: new
+    }
     val draft = integration ?: return
     fun update(change: Integration.() -> Integration) { integration = draft.change() }
 
@@ -114,18 +117,14 @@ fun IntegrationEditScreen(id: Long, onBack: () -> Unit) {
             SwitchRow(R.string.enabled, null, draft.enabled) { v -> update { copy(enabled = v) } }
 
             Text(stringResource(R.string.events), style = MaterialTheme.typography.titleSmall)
-            listOf(
-                AlarmEvent.RINGING to R.string.event_ringing,
-                AlarmEvent.DISMISSED to R.string.event_dismissed,
-                AlarmEvent.MISSED to R.string.event_missed,
-            ).forEach { (event, text) ->
+            AlarmEvent.entries.forEach { event ->
                 val checked = draft.handles(event)
                 Row(
                     Modifier.fillMaxWidth().clickable { update { copy(events = events xor event.bit) } },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Checkbox(checked = checked, onCheckedChange = { update { copy(events = events xor event.bit) } })
-                    Text(stringResource(text))
+                    Text(stringResource(eventLabel(event)))
                 }
             }
 

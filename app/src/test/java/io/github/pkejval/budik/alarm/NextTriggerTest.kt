@@ -80,4 +80,14 @@ class NextTriggerTest {
         assertFalse(CzechHolidays.isHoliday(LocalDate.of(2026, 4, 5))) // Sunday itself is not listed
         assertFalse(CzechHolidays.isHoliday(LocalDate.of(2026, 10, 27)))
     }
+
+    @Test
+    fun upcomingHolidaysCrossYearBoundary() {
+        val upcoming = CzechHolidays.upcoming(LocalDate.of(2026, 12, 26), 3)
+        assertEquals(
+            listOf(LocalDate.of(2026, 12, 26), LocalDate.of(2027, 1, 1), LocalDate.of(2027, 3, 26)),
+            upcoming.map { it.first },
+        )
+        assertEquals(CzechHoliday.GOOD_FRIDAY, upcoming[2].second)
+    }
 }

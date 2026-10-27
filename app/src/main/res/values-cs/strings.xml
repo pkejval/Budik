@@ -66,21 +66,62 @@
     <string name="ringtone_file">Zvukový soubor…</string>
 
     <string name="days_off">Dny volna</string>
-    <string name="days_off_hint">Platí pro budíky se zapnutým „Nezvonit ve dny volna“.</string>
+    <string name="days_off_hint">Budíky se zapnutým „Nezvonit ve dny volna“ přeskočí státní svátky a dny s událostí ve vybraných kalendářích.</string>
     <string name="cz_holidays">České státní svátky</string>
     <string name="cz_holidays_hint">Vestavěné, funguje offline</string>
+    <string name="upcoming_holidays">Nejbližší svátky</string>
+    <string name="calendars">Kalendáře</string>
+    <string name="calendar_permission_hint">Povolte přístup ke kalendáři, aby šlo použít dovolenou a další dny volna z vašich Google kalendářů.</string>
     <string name="grant_calendar">Povolit přístup ke kalendáři</string>
-    <string name="calendars">Kalendáře se dny volna (např. dovolená)</string>
+    <string name="calendars_empty">Není vybrán žádný kalendář. Přidejte ho tlačítkem +, např. kalendář s dovolenou.</string>
+    <string name="selected_calendars">Kalendáře se dny volna</string>
+    <string name="add_calendar">Přidat kalendář</string>
+    <string name="all_calendars_added">Všechny kalendáře jsou už přidané.</string>
     <string name="no_calendars">V zařízení nebyly nalezeny žádné kalendáře.</string>
+    <string name="remove">Odebrat</string>
+    <string name="event_filter">Filtr událostí</string>
     <string name="keywords">Klíčová slova v názvu události</string>
     <string name="keywords_hint">Oddělená čárkou, např. Dovolená, Volno. Prázdné = jakákoli událost ve vybraných kalendářích.</string>
     <string name="integrations">Integrace</string>
     <string name="integrations_hint">Odesílá se okamžitě při zazvonění, vypnutí nebo zmeškání budíku. Neúspěšná síťová odeslání se zopakují po obnovení připojení.</string>
-    <string name="disabled">vypnuto</string>
+    <string name="integrations_empty">Zatím žádné integrace. Přidejte je tlačítkem +.</string>
     <string name="add_integration">Přidat integraci</string>
     <string name="type_intent">Intent</string>
     <string name="type_webhook">Webhook</string>
     <string name="type_mqtt">MQTT</string>
+    <string name="type_intent_desc">Android broadcast pro Tasker, Automate, MacroDroid…</string>
+    <string name="type_webhook_desc">HTTP požadavek, např. Home Assistant nebo n8n</string>
+    <string name="type_mqtt_desc">Publikování zprávy na MQTT broker</string>
+
+    <string name="appearance">Vzhled</string>
+    <string name="preview_label">Práce</string>
+    <string name="ring_style">Barvy obrazovky zvonění</string>
+    <string name="style_night">Noc</string>
+    <string name="style_ocean">Oceán</string>
+    <string name="style_forest">Les</string>
+    <string name="style_sunset">Západ</string>
+    <string name="style_amoled">Černá</string>
+    <string name="style_system">Systém</string>
+    <string name="clock_weight">Písmo hodin</string>
+    <string name="weight_thin">Tenké</string>
+    <string name="weight_light">Lehké</string>
+    <string name="weight_bold">Tučné</string>
+    <string name="ring_animated">Animace</string>
+    <string name="show_date">Zobrazit datum</string>
+
+    <string name="holiday_new_year">Den obnovy samostatného českého státu, Nový rok</string>
+    <string name="holiday_good_friday">Velký pátek</string>
+    <string name="holiday_easter_monday">Velikonoční pondělí</string>
+    <string name="holiday_labour_day">Svátek práce</string>
+    <string name="holiday_liberation">Den vítězství</string>
+    <string name="holiday_cyril_methodius">Den slovanských věrozvěstů Cyrila a Metoděje</string>
+    <string name="holiday_jan_hus">Den upálení mistra Jana Husa</string>
+    <string name="holiday_statehood">Den české státnosti</string>
+    <string name="holiday_independence">Den vzniku samostatného československého státu</string>
+    <string name="holiday_freedom">Den boje za svobodu a demokracii</string>
+    <string name="holiday_christmas_eve">Štědrý den</string>
+    <string name="holiday_christmas_day">1. svátek vánoční</string>
+    <string name="holiday_st_stephen">2. svátek vánoční</string>
 
     <string name="integration">Integrace</string>
     <string name="name">Název</string>
